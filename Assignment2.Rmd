@@ -1,3 +1,13 @@
+---
+title: "Storm Data Analsis 1950 - 2011"
+author: "David Samson"
+date: "August 18, 2015"
+output: html_document
+---
+# Synopsis
+# Data Processing
+
+```{r}
 library(lubridate)
 library(dplyr)
 library(data.table)
@@ -19,21 +29,30 @@ totalDamages <- function (propDamage,propDamageUnits,cropDamage,cropDamageUnits)
   total
 }  
 
-loadAll <- function () {
 colNames<-c("state","eventDate","eventType","fatalities","injuries",
             "propDamage","propDamageUnits","cropDamage","cropDamageUnits","refnum")
 raw<-read.csv("data/repdata-data-StormData.csv",
-#                        skip=100000, nrows = 100000,
-                        colClasses = "character")[c(1,2,8,23:28,37)]
+                        colClasses = "character",               skip=100000,nrows=50000)[c(1,2,8,23:28,37)]
 colnames(raw)<-colNames
-raw<- raw[substring(raw$eventType,1,6) !="Summar",]
-
 ## Clean up section
 # Convert the dates to a date format and create a single 
 raw$eventDate<-mdy(str_replace(str_extract(raw$eventDate,"^.* ")," ",""))
 raw<-cbind(raw, with(raw,mapply(totalDamages,propDamage,propDamageUnits,cropDamage, cropDamageUnits)))
 colnames(raw)<-  c(colNames,"totalDamage")
-} 
+```
 
-# Analysis 
 
+# Results 
+
+
+```{r}
+summary(cars)
+```
+
+You can also embed plots, for example:
+
+```{r, echo=FALSE}
+plot(cars)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
